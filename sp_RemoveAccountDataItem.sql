@@ -1,0 +1,19 @@
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF EXISTS (SELECT 1 FROM sys.procedures WHERE Name = 'sp_RemoveAccountDataItem')
+BEGIN
+	DROP PROCEDURE sp_RemoveAccountDataItem
+END
+
+GO
+
+CREATE PROCEDURE sp_RemoveAccountDataItem(@Name AS NVARCHAR(256)) AS
+BEGIN
+
+	DELETE FROM Accounts WHERE [Name] = @Name
+
+END
