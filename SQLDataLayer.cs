@@ -110,33 +110,13 @@ namespace PasswordWallet
                 _logger.LogError(ex.Message);
             }
             return ret;
-
         }
 
         /// <summary>
-        /// Detach database to allow file to be copied
+        /// CommitData. NOOP for SQL Server
         /// </summary>
-        public void DetachDatabase()
-        {
-            try
-            {
-                using (var connection = OpenConnection())
-                {
-                    using (var sqlCommand = new SqlCommand("sp_detach_db", connection))
-                    {
-                        sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.Parameters.Add(new SqlParameter("@dbname", "PassportWallet"));
-                        sqlCommand.Parameters.Add(new SqlParameter("@keepfulltextindexfile", true));
-                        sqlCommand.ExecuteNonQuery();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-            }
+        public void CommitData() { }
 
-        }
         #endregion
 
         #region Private Methods

@@ -148,6 +148,11 @@ namespace PasswordWallet
         // Decrypt a file using a private key.
         private static void DecryptFile(string inFile, string outFile, RSACryptoServiceProvider rsaPrivateKey)
         {
+            if(File.Exists(inFile) == false)
+            {
+                //nothing to decrypt
+                return;
+            }
 
             // Create instance of AesManaged for
             // symetric decryption of the data.
@@ -210,7 +215,7 @@ namespace PasswordWallet
                         // from the FileSteam of the encrypted
                         // file (inFs) into the FileStream
                         // for the decrypted file (outFs).
-                        using (FileStream outFs = new FileStream(outFile, FileMode.Truncate))
+                        using (FileStream outFs = new FileStream(outFile, FileMode.Create))
                         {
 
                             int count = 0;

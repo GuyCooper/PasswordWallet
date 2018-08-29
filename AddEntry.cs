@@ -61,7 +61,7 @@ namespace PasswordWallet
             try
             {
                 _data.Name = ValidateValue("Name", txtName);
-                _data.Website = ValidateValue("Website", txtWebsite);
+                _data.Website = txtWebsite.Text;
                 _data.UserName = ValidateValue("User Name", txtUserName);
                 _data.Password = ValidateValue("Password", txtPassword); ;
                 _data.Passcode = txtPasscode.Text;

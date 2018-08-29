@@ -12,7 +12,7 @@ namespace PasswordWallet
 
         public string EncryptedFile { get { return txtEncryptedFile.Text; } }
 
-        public string DatabaseFile { get { return txtDatabaseFile.Text; } }
+        public string DecryptedFile { get { return txtDecryptedFile.Text; } }
 
         public string Certificate { get { return txtCertificate.Text; } }
 
@@ -23,11 +23,11 @@ namespace PasswordWallet
         /// <summary>
         /// Constructor
         /// </summary>
-        public DataEncrypt(string encryptedFile, string databaseFile, string certificate)
+        public DataEncrypt(string encryptedFile, string decryptedFile, string certificate)
         {
             InitializeComponent();
             txtCertificate.Text = certificate;
-            txtDatabaseFile.Text = databaseFile;
+            txtDecryptedFile.Text = decryptedFile;
             txtEncryptedFile.Text = encryptedFile;
         }
 
@@ -47,7 +47,7 @@ namespace PasswordWallet
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                txtDatabaseFile.Text = openFileDialog1.FileName;
+                txtDecryptedFile.Text = openFileDialog1.FileName;
             }
         }
 

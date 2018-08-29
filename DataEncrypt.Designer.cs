@@ -31,7 +31,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtEncryptedFile = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtDatabaseFile = new System.Windows.Forms.TextBox();
+            this.txtDecryptedFile = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtCertificate = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
@@ -62,16 +62,16 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(41, 147);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(191, 32);
+            this.label2.Size = new System.Drawing.Size(198, 32);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Database File";
+            this.label2.Text = "Decrypted File";
             // 
-            // txtDatabaseFile
+            // txtDecryptedFile
             // 
-            this.txtDatabaseFile.Location = new System.Drawing.Point(282, 147);
-            this.txtDatabaseFile.Name = "txtDatabaseFile";
-            this.txtDatabaseFile.Size = new System.Drawing.Size(745, 38);
-            this.txtDatabaseFile.TabIndex = 1;
+            this.txtDecryptedFile.Location = new System.Drawing.Point(282, 147);
+            this.txtDecryptedFile.Name = "txtDecryptedFile";
+            this.txtDecryptedFile.Size = new System.Drawing.Size(745, 38);
+            this.txtDecryptedFile.TabIndex = 1;
             // 
             // label3
             // 
@@ -111,9 +111,9 @@
             // 
             // btnPickFile
             // 
-            this.btnPickFile.Location = new System.Drawing.Point(1072, 70);
+            this.btnPickFile.Location = new System.Drawing.Point(1067, 63);
             this.btnPickFile.Name = "btnPickFile";
-            this.btnPickFile.Size = new System.Drawing.Size(81, 38);
+            this.btnPickFile.Size = new System.Drawing.Size(84, 53);
             this.btnPickFile.TabIndex = 2;
             this.btnPickFile.Text = "...";
             this.btnPickFile.UseVisualStyleBackColor = true;
@@ -121,9 +121,9 @@
             // 
             // btnPickFile1
             // 
-            this.btnPickFile1.Location = new System.Drawing.Point(1072, 141);
+            this.btnPickFile1.Location = new System.Drawing.Point(1066, 143);
             this.btnPickFile1.Name = "btnPickFile1";
-            this.btnPickFile1.Size = new System.Drawing.Size(81, 38);
+            this.btnPickFile1.Size = new System.Drawing.Size(84, 53);
             this.btnPickFile1.TabIndex = 5;
             this.btnPickFile1.Text = "...";
             this.btnPickFile1.UseVisualStyleBackColor = true;
@@ -145,7 +145,7 @@
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.txtCertificate);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.txtDatabaseFile);
+            this.Controls.Add(this.txtDecryptedFile);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtEncryptedFile);
             this.Controls.Add(this.label1);
@@ -161,7 +161,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtEncryptedFile;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtDatabaseFile;
+        private System.Windows.Forms.TextBox txtDecryptedFile;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtCertificate;
         private System.Windows.Forms.Button btnOK;

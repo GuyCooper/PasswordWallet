@@ -12,8 +12,7 @@ namespace PasswordWallet
         bool AddOrEditItem(AccountData item);
         IEnumerable<AccountData> LoadAccountData();
         bool RemoveAccountDataItem(AccountData item);
-
-        void DetachDatabase();
+        void CommitData();
     }
 
     interface ILogger

@@ -19,7 +19,7 @@ namespace PasswordWallet
         public Wallet()
         {
             m_logger = new Logger();
-            m_datalayer = new SQLDataLayer(m_logger);
+            m_datalayer = new XMLDataLayer();
 
             InitializeComponent();
 
@@ -35,6 +35,36 @@ namespace PasswordWallet
         }
 
         #endregion
+
+        /// <summary>
+        /// Handle shortcut commands for the toolbar buttons
+        /// </summary>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case (Keys.Control | Keys.A):
+                    BtnAddEntry.PerformClick();
+                    break;
+                case (Keys.Control | Keys.E):
+                    BtnEditEntry.PerformClick();
+                    break;
+                case (Keys.Control | Keys.R):
+                    BtnRemoveEntry.PerformClick();
+                    break;
+                case (Keys.Control | Keys.L):
+                    BtnLoadData.PerformClick();
+                    break;
+                case (Keys.Control | Keys.M):
+                    BtnMagnify.PerformClick();
+                    break;
+                case (Keys.Control | Keys.S):
+                    BtnSaveChanges.PerformClick();
+                    break;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
         #region Private Methods
 
@@ -59,7 +89,6 @@ namespace PasswordWallet
         {
             try
             {
-
                 var addEntry = new AddEntry();
                 if (addEntry.ShowDialog() == DialogResult.OK)
                 {
@@ -95,7 +124,6 @@ namespace PasswordWallet
                         {
                             m_modified = true;
                             accountItem.UpdateAccountAction(AccountAction.REMOVE);
-                            m_accountData.Remove(accountItem);
                             m_displayedaccountData.Remove(accountItem);
 
                             UpdateDisplayState();
@@ -107,7 +135,6 @@ namespace PasswordWallet
             {
                 m_logger.LogError(ex.Message);
             }
-
         }
 
         /// <summary>
@@ -141,7 +168,6 @@ namespace PasswordWallet
             {
                 m_logger.LogError(ex.Message);
             }
-
         }
 
         /// <summary>
@@ -151,47 +177,39 @@ namespace PasswordWallet
         {
             try
             { 
-                bool ok = false;
-                var existingAccountData = m_datalayer.LoadAccountData();
-
-                var removedAccounts = existingAccountData.Where(a =>
-                {
-                    return m_accountData.FirstOrDefault(i => string.Equals(i.Name, a.Name, System.StringComparison.InvariantCultureIgnoreCase) == false) != null;
-                }).ToList();
-
                 //remove accounts
-                foreach (var account in removedAccounts)
+                foreach (var account in m_accountData.Where(a => a.Action == AccountAction.REMOVE))
                 {
-                    ok = m_datalayer.RemoveAccountDataItem(account);
-                    if (ok == false)
+                    if(m_datalayer.RemoveAccountDataItem(account) == false)
                     {
-                        return;
+                        m_logger.LogError($"Failed to remove account: {account.Name}. Already exists");
                     }
                 }
 
                 //now add and edit accounts
-                foreach (var account in m_accountData)
+                foreach (var account in m_accountData.Where(a => a.Action == AccountAction.ADD || a.Action == AccountAction.EDIT))
                 {
-                    ok = m_datalayer.AddOrEditItem(account);
-                    if (ok == false)
+                    if(m_datalayer.AddOrEditItem(account) == false)
                     {
-                        return;
+                        m_logger.LogError($"Failed to AddorRemove account {account.Name}.");
                     }
                 }
+                //now pesist the data
+                m_datalayer.CommitData();
+                m_modified = false;
+                UpdateDisplayState();
 
-                if (ok == true)
+                if (MessageBox.Show(null, "Database successfully updated. Would you like to encrpyt it?", "Save Data", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                 {
-                    m_modified = false;
-                    UpdateDisplayState();
-
-                    if (MessageBox.Show(null, "Database successfully updated. Would you like to encrpyt it?", "Save Data", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                    var encryptDlg = new DataEncrypt(m_encryptedFile, m_decryptedFile, m_certificate);
+                    if (encryptDlg.ShowDialog() == DialogResult.OK)
                     {
-                        var encryptDlg = new DataEncrypt(DefaultEncryptedFile, DefaultDatabaseFile, DefaultCertificate);
-                        if (encryptDlg.ShowDialog() == DialogResult.OK)
-                        {
-                            //m_datalayer.DetachDatabase();
-                            Encryption.EncryptFile(encryptDlg.DatabaseFile, encryptDlg.EncryptedFile, encryptDlg.Certificate);
-                        }
+                        m_encryptedFile = encryptDlg.EncryptedFile;
+                        m_decryptedFile = encryptDlg.DecryptedFile;
+                        m_certificate = encryptDlg.Certificate;
+
+                        Encryption.EncryptFile(m_decryptedFile, m_encryptedFile, m_certificate);
+                        MessageBox.Show("Database successfully encrypted!");
                     }
                 }
             }
@@ -212,36 +230,26 @@ namespace PasswordWallet
             }
         }
 
-        private void txtFilter_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (txtFilter.Text.Length == 0)
-            {
-                PopulateDisplayedList(m_accountData);
-            }
-            else
-            {
-                PopulateDisplayedList(m_accountData.Where(a => a.Name.ToUpper().Contains(txtFilter.Text.ToUpper())));
-            }
-        }
-
         /// <summary>
         /// invoked when the user clicks the load data button
         /// </summary>
         private void BtnLoadData_Click(object sender, EventArgs e)
         {
-            var encryptDlg = new DataEncrypt(DefaultEncryptedFile, DefaultDatabaseFile, DefaultCertificate);
+            var encryptDlg = new DataEncrypt(DefaultEncryptedFile, DefaultDecryptedFile, DefaultCertificate);
             if (encryptDlg.ShowDialog() == DialogResult.OK)
             {
+                m_encryptedFile = encryptDlg.EncryptedFile;
+                m_decryptedFile = encryptDlg.DecryptedFile;
+                m_certificate = encryptDlg.Certificate;
+
                 Cursor previous = Cursor.Current;
                 Cursor.Current = Cursors.WaitCursor;
-                if (string.IsNullOrWhiteSpace(encryptDlg.EncryptedFile) == false)
+                if (string.IsNullOrWhiteSpace(m_encryptedFile) == false)
                 {
-                    Encryption.DecryptFile(encryptDlg.EncryptedFile, encryptDlg.DatabaseFile, encryptDlg.Certificate);
+                    Encryption.DecryptFile(m_encryptedFile, m_decryptedFile, encryptDlg.Certificate);
                 }
 
-                m_databaseFile = encryptDlg.DatabaseFile;
-                var datasource = $@"Data Source = (LocalDb)\MSSQLLocalDB; AttachDbFilename = {m_databaseFile}; Initial Catalog = PassportWallet; Integrated Security = True";
-                m_datalayer.ConnectionString = datasource;
+                m_datalayer.ConnectionString = m_decryptedFile;
                 loadData();
                 Cursor.Current = previous;
 
@@ -300,17 +308,43 @@ namespace PasswordWallet
             }
         }
 
+        /// <summary>
+        /// Invoked when the selection on the grid view changes.
+        /// </summary>
+        private void dataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            UpdateDisplayState();
+        }
+
+        /// <summary>
+        /// Invoked on a key jup event on the filter text box.
+        /// </summary>
+        private void txtFilter_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (txtFilter.Text.Length == 0)
+            {
+                PopulateDisplayedList(m_accountData);
+            }
+            else
+            {
+                PopulateDisplayedList(m_accountData.Where(a => a.Name.ToUpper().Contains(txtFilter.Text.ToUpper())));
+            }
+        }
+
         #region Private Data Members
 
         private readonly List<AccountData> m_accountData = new List<AccountData>();
         private readonly BindingList<AccountData> m_displayedaccountData = new BindingList<AccountData>();
         private readonly IDataLayer m_datalayer;
 
+        private string m_encryptedFile;
+        private string m_decryptedFile;
+        private string m_certificate;
+
         private static readonly string DefaultEncryptedFile = @"C:\Users\guy\OneDrive\Documents\Holidays.enc";
         private static readonly string DefaultCertificate = "CERT_SIGN_PASSWORD_DATA";
-        private static readonly string DefaultDatabaseFile = @"C:\Data\SQLServer\FileDB\PasswordWallet.mdf";
+        private static readonly string DefaultDecryptedFile = @"C:\Data\PasswordData.xml";
 
-        private string m_databaseFile;
         private bool m_loaded = false;
         private bool m_modified = false;
         private ILogger m_logger;
