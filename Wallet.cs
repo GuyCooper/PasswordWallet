@@ -27,9 +27,9 @@ namespace PasswordWallet
             AddColumn(dataGridView, "Name", "Name");
             AddColumn(dataGridView, "Website", "Website");
             AddColumn(dataGridView, "UserName", "UserName");
-            AddColumn(dataGridView, "Password", "Password");
-            AddColumn(dataGridView, "Passcode", "Passcode");
-            AddColumn(dataGridView, "Other", "Other");
+            //AddColumn(dataGridView, "Password", "Password");
+            //AddColumn(dataGridView, "Passcode", "Passcode");
+            //AddColumn(dataGridView, "Other", "Other");
 
             UpdateDisplayState();
         }
