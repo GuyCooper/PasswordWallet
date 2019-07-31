@@ -327,7 +327,12 @@ namespace PasswordWallet
             }
             else
             {
-                PopulateDisplayedList(m_accountData.Where(a => a.Name.ToUpper().Contains(txtFilter.Text.ToUpper())));
+                var filteredData = m_accountData.Where(a => a.Name.ToUpper().Contains(txtFilter.Text.ToUpper())).ToList();
+                if(filteredData.Count == 0)
+                {
+                    filteredData = m_accountData.Where(a => a.Other.ToUpper().Contains(txtFilter.Text.ToUpper())).ToList();
+                }
+                PopulateDisplayedList(filteredData);
             }
         }
 
