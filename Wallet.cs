@@ -29,7 +29,7 @@ namespace PasswordWallet
             AddColumn(dataGridView, "UserName", "UserName");
             //AddColumn(dataGridView, "Password", "Password");
             //AddColumn(dataGridView, "Passcode", "Passcode");
-            //AddColumn(dataGridView, "Other", "Other");
+            AddColumn(dataGridView, "Other", "Other");
 
             UpdateDisplayState();
         }

@@ -138,6 +138,7 @@ namespace PasswordWallet
                             }
                             outStreamEncrypted.FlushFinalBlock();
                             outStreamEncrypted.Close();
+                            File.Delete(tmpFile);
                         }
                         outFs.Close();
                     }
