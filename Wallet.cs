@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.Linq;
 using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace PasswordWallet
 {
@@ -117,10 +119,9 @@ namespace PasswordWallet
             { 
                 if (dataGridView.SelectedRows.Count > 0)
                 {
-                    var accountItem = dataGridView.SelectedRows[0].DataBoundItem as AccountData;
-                    if(accountItem != null)
+                    if (dataGridView.SelectedRows[0].DataBoundItem is AccountData accountItem)
                     {
-                        if(MessageBox.Show(null, $"Are You Sure you want to delete account item {accountItem.Name}?","Delete Item", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        if (MessageBox.Show(null, $"Are You Sure you want to delete account item {accountItem.Name}?", "Delete Item", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             m_modified = true;
                             accountItem.UpdateAccountAction(AccountAction.REMOVE);
@@ -146,8 +147,7 @@ namespace PasswordWallet
             {
                 if (dataGridView.SelectedRows.Count > 0)
                 {
-                    var accountItem = dataGridView.SelectedRows[0].DataBoundItem as AccountData;
-                    if (accountItem != null)
+                    if (dataGridView.SelectedRows[0].DataBoundItem is AccountData accountItem)
                     {
                         var editEntry = new AddEntry(accountItem);
                         if (editEntry.ShowDialog() == DialogResult.OK)
@@ -173,8 +173,11 @@ namespace PasswordWallet
         /// <summary>
         /// Handle save changes event.
         /// </summary>
-        private void BtnSaveChanges_Click(object sender, System.EventArgs e)
+        private async void BtnSaveChanges_Click(object sender, System.EventArgs e)
         {
+            Cursor previous = Cursor.Current;
+            Cursor.Current = Cursors.WaitCursor;
+
             try
             { 
                 //remove accounts
@@ -199,24 +202,30 @@ namespace PasswordWallet
                 m_modified = false;
                 UpdateDisplayState();
 
-                if (MessageBox.Show(null, "Database successfully updated. Would you like to encrpyt it?", "Save Data", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                if(string.IsNullOrEmpty(m_password))
                 {
-                    var encryptDlg = new DataEncrypt(m_encryptedFile, m_decryptedFile, m_certificate);
-                    if (encryptDlg.ShowDialog() == DialogResult.OK)
+                    var passwordDlg = new PasswordConfirm();
+                    if(passwordDlg.ShowDialog() != DialogResult.OK)
                     {
-                        m_encryptedFile = encryptDlg.EncryptedFile;
-                        m_decryptedFile = encryptDlg.DecryptedFile;
-                        m_certificate = encryptDlg.Certificate;
-
-                        Encryption.EncryptFile(m_decryptedFile, m_encryptedFile, m_certificate);
-                        MessageBox.Show("Database successfully encrypted!");
+                        return;
                     }
+
+                    m_password = passwordDlg.EnteredPassword;
                 }
+
+                await PasswordFileEncrypter.FileEncrypt(DefaultDecryptedFile, DefaultEncryptedFile, m_password);
+
             }
             catch (Exception ex)
             {
                 m_logger.LogError(ex.Message);
+                MessageBox.Show("Load Database Failed", $"{ex.Message}");
             }
+            finally
+            {
+                Cursor.Current = previous;
+            }
+
         }
 
         #endregion
@@ -233,53 +242,62 @@ namespace PasswordWallet
         /// <summary>
         /// invoked when the user clicks the load data button
         /// </summary>
-        private void BtnLoadData_Click(object sender, EventArgs e)
+        private async void BtnLoadData_Click(object sender, EventArgs e)
         {
-            var encryptDlg = new DataEncrypt(DefaultEncryptedFile, DefaultDecryptedFile, DefaultCertificate);
-            if (encryptDlg.ShowDialog() == DialogResult.OK)
-            {
-                m_encryptedFile = encryptDlg.EncryptedFile;
-                m_decryptedFile = encryptDlg.DecryptedFile;
-                m_certificate = encryptDlg.Certificate;
+            Cursor previous = Cursor.Current;
+            Cursor.Current = Cursors.WaitCursor;
 
-                Cursor previous = Cursor.Current;
-                Cursor.Current = Cursors.WaitCursor;
-                if (string.IsNullOrWhiteSpace(m_encryptedFile) == false)
+            try
+            {
+                if (File.Exists(DirectLoadFile))
                 {
-                    Encryption.DecryptFile(m_encryptedFile, m_decryptedFile, encryptDlg.Certificate);
+                    File.Copy(DirectLoadFile, DefaultDecryptedFile, true);
+                }
+                else
+                {
+                    var passwordDlg = new Password();
+                    if (passwordDlg.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+
+                    m_password = passwordDlg.EnteredPassword;
+
+                    await PasswordFileEncrypter.FileDecrypt(DefaultEncryptedFile, DefaultDecryptedFile, m_password);
                 }
 
-                m_datalayer.ConnectionString = m_decryptedFile;
-                loadData();
-                Cursor.Current = previous;
-
+                m_datalayer.ConnectionString = DefaultDecryptedFile;
+                LoadData();
+                UpdateDisplayState();
                 m_loaded = true;
-                UpdateDisplayState();      
             }
+            catch(Exception ex)
+            {
+                m_logger.LogError(ex.Message);
+                MessageBox.Show("Load Database Failed", $"{ex.Message}");
+            }
+            finally
+            {
+                Cursor.Current = previous;
+            }
+
         }
 
         /// <summary>
         /// reload the account data from the database
         /// </summary>
-        private void loadData()
+        private void LoadData()
         {
-            try
-            {
-                m_accountData.Clear();
-                m_accountData.AddRange(m_datalayer.LoadAccountData().ToList());
-                PopulateDisplayedList(m_accountData);
+            m_accountData.Clear();
+            m_accountData.AddRange(m_datalayer.LoadAccountData().ToList());
+            PopulateDisplayedList(m_accountData);
 
-                passwordDataSource.DataSource = m_displayedaccountData;
-                dataGridView.DataSource = passwordDataSource;
+            passwordDataSource.DataSource = m_displayedaccountData;
+            dataGridView.DataSource = passwordDataSource;
 
-                //dataGridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
-                dataGridView.AutoResizeColumns();
-                dataGridView.AutoResizeRows();
-            }
-            catch(Exception ex)
-            {
-                m_logger.LogError(ex.Message);              
-            }
+            //dataGridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+            dataGridView.AutoResizeColumns();
+            dataGridView.AutoResizeRows();
         }
 
         /// <summary>
@@ -300,8 +318,7 @@ namespace PasswordWallet
         /// </summary>
         private void BtnMagnify_Click(object sender, EventArgs e)
         {
-            var accountItem = dataGridView.SelectedRows[0].DataBoundItem as AccountData;
-            if (accountItem != null)
+            if (dataGridView.SelectedRows[0].DataBoundItem is AccountData accountItem)
             {
                 var magnifer = new Magnify(accountItem);
                 magnifer.ShowDialog();
@@ -311,7 +328,7 @@ namespace PasswordWallet
         /// <summary>
         /// Invoked when the selection on the grid view changes.
         /// </summary>
-        private void dataGridView_SelectionChanged(object sender, EventArgs e)
+        private void DataGridView_SelectionChanged(object sender, EventArgs e)
         {
             UpdateDisplayState();
         }
@@ -319,7 +336,7 @@ namespace PasswordWallet
         /// <summary>
         /// Invoked on a key jup event on the filter text box.
         /// </summary>
-        private void txtFilter_KeyUp(object sender, KeyEventArgs e)
+        private void TxtFilter_KeyUp(object sender, KeyEventArgs e)
         {
             if (txtFilter.Text.Length == 0)
             {
@@ -342,17 +359,15 @@ namespace PasswordWallet
         private readonly BindingList<AccountData> m_displayedaccountData = new BindingList<AccountData>();
         private readonly IDataLayer m_datalayer;
 
-        private string m_encryptedFile;
-        private string m_decryptedFile;
-        private string m_certificate;
+        private string m_password = null;
 
-        private static readonly string DefaultEncryptedFile = @"C:\Users\guy\OneDrive\Documents\Holidays.enc";
-        private static readonly string DefaultCertificate = "CERT_SIGN_PASSWORD_DATA";
-        private static readonly string DefaultDecryptedFile = @"C:\Data\PasswordData.xml";
+        private static readonly string DefaultEncryptedFile = @"C:\Users\guy\OneDrive\Documents\Holidays1.enc";
+        private static readonly string DefaultDecryptedFile = @"C:\Projects\Data\TmpData.xml";
+        private static readonly string DirectLoadFile = @"C:\Projects\Data\PasswordData.xml";
 
         private bool m_loaded = false;
         private bool m_modified = false;
-        private ILogger m_logger;
+        private readonly ILogger m_logger;
 
         #endregion
     }

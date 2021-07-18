@@ -87,7 +87,7 @@
             this.txtFilterPassword.Name = "txtFilterPassword";
             this.txtFilterPassword.Size = new System.Drawing.Size(232, 53);
             this.txtFilterPassword.TabIndex = 0;
-            this.txtFilterPassword.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtFilterPassword_KeyUp);
+            this.txtFilterPassword.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TxtFilterPassword_KeyUp);
             // 
             // txtPassword
             // 
@@ -106,7 +106,7 @@
             this.txtFilterPasscode.Name = "txtFilterPasscode";
             this.txtFilterPasscode.Size = new System.Drawing.Size(232, 53);
             this.txtFilterPasscode.TabIndex = 2;
-            this.txtFilterPasscode.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtFilterPasscode_KeyUp);
+            this.txtFilterPasscode.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TxtFilterPasscode_KeyUp);
             // 
             // txtPassCode
             // 

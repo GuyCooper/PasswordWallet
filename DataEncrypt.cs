@@ -35,7 +35,7 @@ namespace PasswordWallet
 
         #region Private Methods
 
-        private void btnPickFile_Click(object sender, EventArgs e)
+        private void BtnPickFile_Click(object sender, EventArgs e)
         {
             if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -43,7 +43,7 @@ namespace PasswordWallet
             }
         }
 
-        private void btnPickFile1_Click(object sender, EventArgs e)
+        private void BtnPickFile1_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {

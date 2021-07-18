@@ -19,7 +19,7 @@ namespace XmlStorage
         {
             m_keyPropertyInfo = typeof(T).GetProperty(index);
             m_source = source;
-            loadFile();
+            LoadFile();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace XmlStorage
                 return;
             }
 
-            using (var fs = File.OpenWrite(m_source))
+            using (var fs = File.Open(m_source, FileMode.Create, FileAccess.Write))
             {
                 var serialiser = new XmlSerializer(typeof(List<string>));
                 var items = m_index.Values.ToList();
@@ -47,13 +47,12 @@ namespace XmlStorage
         /// </summary>
         public T GetItem(string lookup)
         {
-            string val;
-            m_index.TryGetValue(lookup, out val);
-            if(val != null)
+            m_index.TryGetValue(lookup, out string val);
+            if (val != null)
             {
-                return deSerialiseItem(val);
+                return DeSerialiseItem(val);
             }
-            return default(T);
+            return default;
         }
 
         /// <summary>
@@ -61,7 +60,7 @@ namespace XmlStorage
         /// </summary>
         public IEnumerable<T> GetAllItems()
         {
-            return m_index.Values.Select(item => deSerialiseItem(item));
+            return m_index.Values.Select(item => DeSerialiseItem(item));
         }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace XmlStorage
         public void AddorUpdatetem(T item)
         {
             var key = m_keyPropertyInfo.GetValue(item).ToString();
-            string serialisedItem = serialiseItem(item);
+            string serialisedItem = SerialiseItem(item);
             if (m_index.ContainsKey(key) == true)
             {
                 m_index[key] = serialisedItem;
@@ -100,7 +99,7 @@ namespace XmlStorage
         /// <summary>
         /// load file from disk and popluate the index
         /// </summary>
-        private void loadFile()
+        private void LoadFile()
         {
             if (m_keyPropertyInfo == null)
             {
@@ -122,7 +121,7 @@ namespace XmlStorage
 
             foreach (var str in items)
             {
-                var item = deSerialiseItem(str);
+                var item = DeSerialiseItem(str);
                 m_index.Add(m_keyPropertyInfo.GetValue(item).ToString(), str);
             }
         }
@@ -130,7 +129,7 @@ namespace XmlStorage
         /// <summary>
         /// Serialise an item
         /// </summary>
-        private string serialiseItem(T item)
+        private string SerialiseItem(T item)
         {
             var serialiser = new XmlSerializer(typeof(T));
             using (var sw = new StringWriter())
@@ -143,7 +142,7 @@ namespace XmlStorage
         /// <summary>
         /// deserialise an item
         /// </summary>
-        private T deSerialiseItem(string item)
+        private T DeSerialiseItem(string item)
         {
             var serialiser = new XmlSerializer(typeof(T));
             using (var sr = new StringReader(item))
@@ -157,11 +156,11 @@ namespace XmlStorage
         #region Private Data Members
 
         //indexed lookup of item to serialised value
-        private Dictionary<string, string> m_index = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> m_index = new Dictionary<string, string>();
 
-        private PropertyInfo m_keyPropertyInfo;
+        private readonly PropertyInfo m_keyPropertyInfo;
 
-        private string m_source;
+        private readonly string m_source;
 
         private bool m_dirty;
 

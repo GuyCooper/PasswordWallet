@@ -122,7 +122,7 @@ namespace PasswordWallet
                             int bytesRead = 0;
 
                             //using (FileStream inFs = new FileStream(inFile, FileMode.Open, FileAccess.Read))
-                            var tmpFile = $"tmpDBFile_{Guid.NewGuid().ToString()}.tmp";
+                            var tmpFile = $"tmpDBFile_{Guid.NewGuid()}.tmp";
                             File.Copy(inFile, tmpFile);
                             using (FileStream inFs = File.OpenRead(tmpFile))
                             {

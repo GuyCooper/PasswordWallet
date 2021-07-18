@@ -21,7 +21,7 @@ namespace PasswordWallet
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void txtFilterPassword_KeyUp(object sender, KeyEventArgs e)
+        private void TxtFilterPassword_KeyUp(object sender, KeyEventArgs e)
         {
             FilterValue(txtPassword, txtFilterPassword.Text, m_Data.Password);
         }
@@ -29,7 +29,7 @@ namespace PasswordWallet
         /// <summary>
         /// Method called when key up event occurs on passcode filter
         /// </summary>
-        private void txtFilterPasscode_KeyUp(object sender, KeyEventArgs e)
+        private void TxtFilterPasscode_KeyUp(object sender, KeyEventArgs e)
         {
             FilterValue(txtPassCode, txtFilterPasscode.Text, m_Data.Passcode);
         }
@@ -49,8 +49,7 @@ namespace PasswordWallet
                 string filtered = "";
                 foreach (var i in indexes)
                 {
-                    int index;
-                    if ((int.TryParse(i, out index) == true) && (index <= defaultValue.Length))
+                    if ((int.TryParse(i, out int index) == true) && (index <= defaultValue.Length))
                     {
                         filtered += defaultValue[index - 1];
                     }

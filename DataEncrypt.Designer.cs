@@ -117,7 +117,7 @@
             this.btnPickFile.TabIndex = 2;
             this.btnPickFile.Text = "...";
             this.btnPickFile.UseVisualStyleBackColor = true;
-            this.btnPickFile.Click += new System.EventHandler(this.btnPickFile_Click);
+            this.btnPickFile.Click += new System.EventHandler(this.BtnPickFile_Click);
             // 
             // btnPickFile1
             // 
@@ -127,7 +127,7 @@
             this.btnPickFile1.TabIndex = 5;
             this.btnPickFile1.Text = "...";
             this.btnPickFile1.UseVisualStyleBackColor = true;
-            this.btnPickFile1.Click += new System.EventHandler(this.btnPickFile1_Click);
+            this.btnPickFile1.Click += new System.EventHandler(this.BtnPickFile1_Click);
             // 
             // openFileDialog1
             // 
