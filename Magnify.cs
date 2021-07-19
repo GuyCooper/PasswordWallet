@@ -12,8 +12,8 @@ namespace PasswordWallet
         {
             InitializeComponent();
             m_Data = data;
-            txtPassCode.Text = data.Passcode;
-            txtPassword.Text = data.Password;
+            //txtPassCode.Text = data.Passcode;
+            //txtPassword.Text = data.Password;
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace PasswordWallet
         {
             if (filter.Length == 0)
             {
-                target.Text = defaultValue;
+                target.Text = "";
             }
             else
             {
