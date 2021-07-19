@@ -44,7 +44,7 @@ namespace PasswordWallet
             this.label1.Location = new System.Drawing.Point(12, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(121, 20);
-            this.label1.TabIndex = 0;
+            this.label1.TabIndex = 4;
             this.label1.Text = "Enter Password";
             // 
             // label2
@@ -53,7 +53,7 @@ namespace PasswordWallet
             this.label2.Location = new System.Drawing.Point(12, 70);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(145, 20);
-            this.label2.TabIndex = 1;
+            this.label2.TabIndex = 5;
             this.label2.Text = "Re-enter Password";
             // 
             // txtPassword
@@ -62,7 +62,7 @@ namespace PasswordWallet
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(361, 26);
-            this.txtPassword.TabIndex = 2;
+            this.txtPassword.TabIndex = 0;
             this.txtPassword.TextChanged += new System.EventHandler(this.TxtPassword_TextChanged);
             // 
             // txtPassword2
@@ -71,7 +71,7 @@ namespace PasswordWallet
             this.txtPassword2.Name = "txtPassword2";
             this.txtPassword2.PasswordChar = '*';
             this.txtPassword2.Size = new System.Drawing.Size(361, 26);
-            this.txtPassword2.TabIndex = 3;
+            this.txtPassword2.TabIndex = 1;
             this.txtPassword2.TextChanged += new System.EventHandler(this.TxtPassword2_TextChanged);
             // 
             // btnOK
@@ -81,7 +81,7 @@ namespace PasswordWallet
             this.btnOK.Location = new System.Drawing.Point(452, 96);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 29);
-            this.btnOK.TabIndex = 4;
+            this.btnOK.TabIndex = 3;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
@@ -91,7 +91,7 @@ namespace PasswordWallet
             this.button2.Location = new System.Drawing.Point(361, 96);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 29);
-            this.button2.TabIndex = 5;
+            this.button2.TabIndex = 2;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
             // 
@@ -107,6 +107,7 @@ namespace PasswordWallet
             // 
             // PasswordConfirm
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(557, 145);

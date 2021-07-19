@@ -54,9 +54,6 @@ namespace PasswordWallet
                 case (Keys.Control | Keys.R):
                     BtnRemoveEntry.PerformClick();
                     break;
-                case (Keys.Control | Keys.L):
-                    BtnLoadData.PerformClick();
-                    break;
                 case (Keys.Control | Keys.M):
                     BtnMagnify.PerformClick();
                     break;
@@ -240,13 +237,10 @@ namespace PasswordWallet
         }
 
         /// <summary>
-        /// invoked when the user clicks the load data button
+        /// reload the account data from the database
         /// </summary>
-        private async void BtnLoadData_Click(object sender, EventArgs e)
+        private async Task LoadData()
         {
-            Cursor previous = Cursor.Current;
-            Cursor.Current = Cursors.WaitCursor;
-
             try
             {
                 if (File.Exists(DirectLoadFile))
@@ -267,37 +261,25 @@ namespace PasswordWallet
                 }
 
                 m_datalayer.ConnectionString = DefaultDecryptedFile;
-                LoadData();
+                m_accountData.Clear();
+                m_accountData.AddRange(m_datalayer.LoadAccountData().ToList());
+                PopulateDisplayedList(m_accountData);
+
+                passwordDataSource.DataSource = m_displayedaccountData;
+                dataGridView.DataSource = passwordDataSource;
+
+                //dataGridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+                dataGridView.AutoResizeColumns();
+                dataGridView.AutoResizeRows();
+
                 UpdateDisplayState();
                 m_loaded = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 m_logger.LogError(ex.Message);
                 MessageBox.Show("Load Database Failed", $"{ex.Message}");
             }
-            finally
-            {
-                Cursor.Current = previous;
-            }
-
-        }
-
-        /// <summary>
-        /// reload the account data from the database
-        /// </summary>
-        private void LoadData()
-        {
-            m_accountData.Clear();
-            m_accountData.AddRange(m_datalayer.LoadAccountData().ToList());
-            PopulateDisplayedList(m_accountData);
-
-            passwordDataSource.DataSource = m_displayedaccountData;
-            dataGridView.DataSource = passwordDataSource;
-
-            //dataGridView.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
-            dataGridView.AutoResizeColumns();
-            dataGridView.AutoResizeRows();
         }
 
         /// <summary>
@@ -307,7 +289,6 @@ namespace PasswordWallet
         {
             BtnAddEntry.Enabled = m_loaded == true;
             BtnEditEntry.Enabled = dataGridView.SelectedRows.Count > 0;
-            BtnLoadData.Enabled = m_loaded == false;
             BtnRemoveEntry.Enabled = dataGridView.SelectedRows.Count > 0;
             BtnSaveChanges.Enabled = m_modified == true;
             BtnMagnify.Enabled = dataGridView.SelectedRows.Count > 0;
@@ -353,6 +334,20 @@ namespace PasswordWallet
             }
         }
 
+        private async void Wallet_Load(object sender, EventArgs e)
+        {
+            Cursor previous = Cursor.Current;
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                await LoadData();
+            }
+            finally
+            {
+                Cursor.Current = previous;
+            }
+        }
+
         #region Private Data Members
 
         private readonly List<AccountData> m_accountData = new List<AccountData>();
@@ -370,6 +365,7 @@ namespace PasswordWallet
         private readonly ILogger m_logger;
 
         #endregion
+
     }
 
     /// <summary>

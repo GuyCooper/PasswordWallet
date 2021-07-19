@@ -37,15 +37,14 @@
             this.BtnRemoveEntry = new System.Windows.Forms.ToolStripButton();
             this.BtnEditEntry = new System.Windows.Forms.ToolStripButton();
             this.BtnSaveChanges = new System.Windows.Forms.ToolStripButton();
-            this.BtnLoadData = new System.Windows.Forms.ToolStripButton();
             this.BtnMagnify = new System.Windows.Forms.ToolStripButton();
-            this.passwordDataSource = new System.Windows.Forms.BindingSource(this.components);
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.txtFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.passwordDataSource = new System.Windows.Forms.BindingSource(this.components);
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.passwordDataSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.passwordDataSource)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -56,11 +55,11 @@
             this.BtnRemoveEntry,
             this.BtnEditEntry,
             this.BtnSaveChanges,
-            this.BtnLoadData,
             this.BtnMagnify});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1787, 39);
+            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 1, 0);
+            this.toolStrip1.Size = new System.Drawing.Size(1005, 41);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -112,18 +111,6 @@
             this.BtnSaveChanges.ToolTipText = "Save Changes (Ctrl-S)";
             this.BtnSaveChanges.Click += new System.EventHandler(this.BtnSaveChanges_Click);
             // 
-            // BtnLoadData
-            // 
-            this.BtnLoadData.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.BtnLoadData.Image = ((System.Drawing.Image)(resources.GetObject("BtnLoadData.Image")));
-            this.BtnLoadData.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.BtnLoadData.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.BtnLoadData.Name = "BtnLoadData";
-            this.BtnLoadData.Size = new System.Drawing.Size(36, 36);
-            this.BtnLoadData.Text = "toolStripButton1";
-            this.BtnLoadData.ToolTipText = "Load Data (Ctrl-L)";
-            this.BtnLoadData.Click += new System.EventHandler(this.BtnLoadData_Click);
-            // 
             // BtnMagnify
             // 
             this.BtnMagnify.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -147,8 +134,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Location = new System.Drawing.Point(-113, 186);
-            this.dataGridView.MaximumSize = new System.Drawing.Size(2500, 1300);
+            this.dataGridView.Location = new System.Drawing.Point(-64, 120);
+            this.dataGridView.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridView.MaximumSize = new System.Drawing.Size(1406, 839);
             this.dataGridView.MultiSelect = false;
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ReadOnly = true;
@@ -162,44 +150,48 @@
             this.dataGridView.RowTemplate.Height = 30;
             this.dataGridView.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(1900, 754);
+            this.dataGridView.Size = new System.Drawing.Size(1069, 486);
             this.dataGridView.TabIndex = 2;
             this.dataGridView.SelectionChanged += new System.EventHandler(this.DataGridView_SelectionChanged);
             // 
             // txtFilter
             // 
-            this.txtFilter.Location = new System.Drawing.Point(90, 98);
+            this.txtFilter.Location = new System.Drawing.Point(51, 63);
+            this.txtFilter.Margin = new System.Windows.Forms.Padding(2);
             this.txtFilter.Name = "txtFilter";
-            this.txtFilter.Size = new System.Drawing.Size(362, 38);
+            this.txtFilter.Size = new System.Drawing.Size(205, 26);
             this.txtFilter.TabIndex = 1;
             this.txtFilter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TxtFilter_KeyUp);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 100);
+            this.label1.Location = new System.Drawing.Point(2, 65);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(87, 32);
+            this.label1.Size = new System.Drawing.Size(48, 20);
             this.label1.TabIndex = 3;
             this.label1.Text = "Filter:";
             // 
             // Wallet
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1787, 964);
+            this.ClientSize = new System.Drawing.Size(1005, 622);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtFilter);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.dataGridView);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Wallet";
             this.Text = "Password Wallet";
+            this.Load += new System.EventHandler(this.Wallet_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.passwordDataSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.passwordDataSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -212,7 +204,6 @@
         private System.Windows.Forms.ToolStripButton BtnRemoveEntry;
         private System.Windows.Forms.ToolStripButton BtnEditEntry;
         private System.Windows.Forms.ToolStripButton BtnSaveChanges;
-        private System.Windows.Forms.ToolStripButton BtnLoadData;
         private System.Windows.Forms.ToolStripButton BtnMagnify;
         private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.TextBox txtFilter;

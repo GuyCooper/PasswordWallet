@@ -135,7 +135,7 @@ namespace PasswordWallet
         /// <summary>
         /// helper method for extracting a database value in a recordset
         /// </summary>
-        protected T GetDBValue<T>(string name, SqlDataReader reader, T defaultVal = default(T))
+        protected T GetDBValue<T>(string name, SqlDataReader reader, T defaultVal = default)
         {
             var result = reader[name];
             if (result.GetType() != typeof(System.DBNull))
@@ -150,7 +150,7 @@ namespace PasswordWallet
 
         #region Private Data Members
 
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         #endregion
     }

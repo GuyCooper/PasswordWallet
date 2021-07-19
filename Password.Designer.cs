@@ -50,7 +50,7 @@ namespace PasswordWallet
             this.label1.Location = new System.Drawing.Point(12, 23);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(121, 20);
-            this.label1.TabIndex = 1;
+            this.label1.TabIndex = 2;
             this.label1.Text = "Enter Password";
             // 
             // txtPassword
@@ -59,10 +59,11 @@ namespace PasswordWallet
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(341, 26);
-            this.txtPassword.TabIndex = 2;
+            this.txtPassword.TabIndex = 0;
             // 
             // Password
             // 
+            this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(512, 113);
