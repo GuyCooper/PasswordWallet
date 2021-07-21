@@ -18,10 +18,10 @@ namespace PasswordWallet
         /// <summary>
         /// Constructor
         /// </summary>
-        public Wallet()
+        public Wallet(IDataLayer dataLayer)
         {
             m_logger = new Logger();
-            m_datalayer = new XMLDataLayer();
+            m_datalayer = dataLayer;
 
             InitializeComponent();
 
@@ -210,7 +210,7 @@ namespace PasswordWallet
                     m_password = passwordDlg.EnteredPassword;
                 }
 
-                await PasswordFileEncrypter.FileEncrypt(DefaultDecryptedFile, DefaultEncryptedFile, m_password);
+                await PasswordFileEncrypter.StringEncrypt(m_datalayer.ConnectionString, DefaultEncryptedFile, m_password);
 
             }
             catch (Exception ex)
@@ -245,7 +245,7 @@ namespace PasswordWallet
             {
                 if (File.Exists(DirectLoadFile))
                 {
-                    File.Copy(DirectLoadFile, DefaultDecryptedFile, true);
+                    m_datalayer.ConnectionString = File.ReadAllText(DirectLoadFile);
                 }
                 else
                 {
@@ -257,10 +257,9 @@ namespace PasswordWallet
 
                     m_password = passwordDlg.EnteredPassword;
 
-                    await PasswordFileEncrypter.FileDecrypt(DefaultEncryptedFile, DefaultDecryptedFile, m_password);
+                    m_datalayer.ConnectionString = await PasswordFileEncrypter.FileDecrypt(DefaultEncryptedFile, m_password);
                 }
 
-                m_datalayer.ConnectionString = DefaultDecryptedFile;
                 m_accountData.Clear();
                 m_accountData.AddRange(m_datalayer.LoadAccountData().ToList());
                 PopulateDisplayedList(m_accountData);
@@ -357,7 +356,7 @@ namespace PasswordWallet
         private string m_password = null;
 
         private static readonly string DefaultEncryptedFile = @"C:\Users\guy\OneDrive\Documents\Holidays1.enc";
-        private static readonly string DefaultDecryptedFile = @"C:\Projects\Data\TmpData.xml";
+        //private static readonly string DefaultDecryptedFile = @"C:\Projects\Data\TmpData.xml";
         private static readonly string DirectLoadFile = @"C:\Projects\Data\PasswordData.xml";
 
         private bool m_loaded = false;

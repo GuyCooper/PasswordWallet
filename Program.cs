@@ -13,7 +13,7 @@ namespace PasswordWallet
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Wallet());
+            Application.Run(new Wallet(new XmlDataStreamStorage()));
         }
     }
 }
