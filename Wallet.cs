@@ -23,6 +23,9 @@ namespace PasswordWallet
             m_logger = new Logger();
             m_datalayer = dataLayer;
 
+            _encryptedFileName = DefaultEncryptedFile;
+            _directLoadFileName = DirectLoadFile;
+
             InitializeComponent();
 
             dataGridView.AutoGenerateColumns = false;
@@ -210,7 +213,7 @@ namespace PasswordWallet
                     m_password = passwordDlg.EnteredPassword;
                 }
 
-                await PasswordFileEncrypter.StringEncrypt(m_datalayer.ConnectionString, DefaultEncryptedFile, m_password);
+                await PasswordFileEncrypter.StringEncrypt(m_datalayer.ConnectionString, _encryptedFileName, m_password);
 
             }
             catch (Exception ex)
@@ -243,9 +246,9 @@ namespace PasswordWallet
         {
             try
             {
-                if (File.Exists(DirectLoadFile))
+                if (File.Exists(_directLoadFileName))
                 {
-                    m_datalayer.ConnectionString = File.ReadAllText(DirectLoadFile);
+                    m_datalayer.ConnectionString = File.ReadAllText(_directLoadFileName);
                 }
                 else
                 {
@@ -257,7 +260,7 @@ namespace PasswordWallet
 
                     m_password = passwordDlg.EnteredPassword;
 
-                    m_datalayer.ConnectionString = await PasswordFileEncrypter.FileDecrypt(DefaultEncryptedFile, m_password);
+                    m_datalayer.ConnectionString = await PasswordFileEncrypter.FileDecrypt(_encryptedFileName, m_password);
                 }
 
                 m_accountData.Clear();
@@ -359,12 +362,24 @@ namespace PasswordWallet
         //private static readonly string DefaultDecryptedFile = @"C:\Projects\Data\TmpData.xml";
         private static readonly string DirectLoadFile = @"C:\Projects\Data\PasswordData.xml";
 
+        private string _encryptedFileName;
+        private string _directLoadFileName;
+
         private bool m_loaded = false;
         private bool m_modified = false;
         private readonly ILogger m_logger;
 
         #endregion
 
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            var settings = new Settings(_directLoadFileName, _encryptedFileName);
+            if(settings.ShowDialog() == DialogResult.OK)
+            {
+                _directLoadFileName = settings.DirectLoadFile;
+                _encryptedFileName = settings.EncryptedFile;
+            }
+        }
     }
 
     /// <summary>
