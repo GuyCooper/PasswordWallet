@@ -150,6 +150,7 @@ namespace PasswordWallet
                     if (dataGridView.SelectedRows[0].DataBoundItem is AccountData accountItem)
                     {
                         var editEntry = new AddEntry(accountItem);
+                        
                         if (editEntry.ShowDialog() == DialogResult.OK)
                         {
                             m_modified = true;

@@ -18,6 +18,8 @@ namespace PasswordWallet
             InitializeComponent();
             _action = AccountAction.ADD;
             _data = new AccountData();
+            btnCopyPassword.Hide();
+            btnCopyPasscode.Hide();
         }
 
         /// <summary>
@@ -31,11 +33,18 @@ namespace PasswordWallet
             this.txtWebsite.Text = _data.Website;
             this.txtUserName.Text = _data.UserName;
             this.txtPassword.Text = _data.Password;
+            this.txtPassword.UseSystemPasswordChar = true;
             this.txtPasscode.Text = _data.Passcode;
+            this.txtPasscode.UseSystemPasswordChar = true;
             this.txtOther.Text = _data.Other;
 
             this.Text = "Edit Entry";
             this.btnAdd.Text = "Edit";
+
+            if(string.IsNullOrEmpty(this.txtPasscode.Text))
+            {
+                btnCopyPasscode.Hide();
+            }
 
             _action = AccountAction.EDIT;
         }
@@ -97,5 +106,15 @@ namespace PasswordWallet
         private readonly AccountData _data;
 
         #endregion
+
+        private void btnCopyPassword_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(txtPassword.Text);
+        }
+
+        private void btnCopyPasscode_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(txtPasscode.Text);
+        }
     }
 }
