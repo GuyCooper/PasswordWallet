@@ -214,6 +214,9 @@ namespace PasswordWallet
                     m_password = passwordDlg.EnteredPassword;
                 }
 
+                // backup existing encrypted file
+                var backupFileName = Path.Combine(BackupFolder, Path.GetFileName(_encryptedFileName));
+                File.Copy(_encryptedFileName, backupFileName, true);
                 await PasswordFileEncrypter.StringEncrypt(m_datalayer.ConnectionString, _encryptedFileName, m_password);
 
             }
@@ -361,6 +364,7 @@ namespace PasswordWallet
         private static readonly string DefaultEncryptedFile = @"C:\Users\guy\OneDrive\Documents\Holidays1.enc";
         //private static readonly string DefaultDecryptedFile = @"C:\Projects\Data\TmpData.xml";
         private static readonly string DirectLoadFile = @"C:\Projects\Data\PasswordData.xml";
+        public static readonly string BackupFolder = @"C:\Projects\Data";
 
         private string _encryptedFileName;
         private string _directLoadFileName;
