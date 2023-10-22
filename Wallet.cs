@@ -143,32 +143,7 @@ namespace PasswordWallet
         /// </summary>
         private void BtnEditEntry_Click(object sender, System.EventArgs e)
         {
-            try
-            {
-                if (dataGridView.SelectedRows.Count > 0)
-                {
-                    if (dataGridView.SelectedRows[0].DataBoundItem is AccountData accountItem)
-                    {
-                        var editEntry = new AddEntry(accountItem);
-                        
-                        if (editEntry.ShowDialog() == DialogResult.OK)
-                        {
-                            m_modified = true;
-                            //m_accountData.Remove(accountItem);
-                            //m_accountData.Add(editEntry.GetAccountData());
-
-                            dataGridView.AutoResizeColumns();
-                            dataGridView.AutoResizeRows();
-
-                            UpdateDisplayState();
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                m_logger.LogError(ex.Message);
-            }
+            EditSelectedEntry();
         }
 
         /// <summary>
@@ -383,6 +358,42 @@ namespace PasswordWallet
                 _directLoadFileName = settings.DirectLoadFile;
                 _encryptedFileName = settings.EncryptedFile;
             }
+        }
+
+        private void dataGridView_DoubleClick(object sender, EventArgs e)
+        {
+            EditSelectedEntry();
+        }
+
+        private void EditSelectedEntry()
+        {
+            try
+            {
+                if (dataGridView.SelectedRows.Count > 0)
+                {
+                    if (dataGridView.SelectedRows[0].DataBoundItem is AccountData accountItem)
+                    {
+                        var editEntry = new AddEntry(accountItem);
+
+                        if (editEntry.ShowDialog() == DialogResult.OK)
+                        {
+                            m_modified = true;
+                            //m_accountData.Remove(accountItem);
+                            //m_accountData.Add(editEntry.GetAccountData());
+
+                            dataGridView.AutoResizeColumns();
+                            dataGridView.AutoResizeRows();
+
+                            UpdateDisplayState();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                m_logger.LogError(ex.Message);
+            }
+
         }
     }
 

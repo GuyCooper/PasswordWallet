@@ -164,6 +164,7 @@
             this.dataGridView.Size = new System.Drawing.Size(951, 389);
             this.dataGridView.TabIndex = 2;
             this.dataGridView.SelectionChanged += new System.EventHandler(this.DataGridView_SelectionChanged);
+            this.dataGridView.DoubleClick += new System.EventHandler(this.dataGridView_DoubleClick);
             // 
             // txtFilter
             // 
