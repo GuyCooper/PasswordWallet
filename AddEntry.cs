@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace PasswordWallet
 {
@@ -20,6 +21,12 @@ namespace PasswordWallet
             _data = new AccountData();
             btnCopyPassword.Hide();
             btnCopyPasscode.Hide();
+            txtPasswordFilterInput.Hide();
+            txtPasswordFilterResult.Hide();
+            txtPasscodeFilterInput.Hide();
+            txtPasscodeFilterResult.Hide();
+            FilterLabel1.Hide();
+            FilterLabel2.Hide();
         }
 
         /// <summary>
@@ -48,6 +55,10 @@ namespace PasswordWallet
 
             _action = AccountAction.EDIT;
         }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// return a Account data object from the entry values
@@ -97,15 +108,29 @@ namespace PasswordWallet
             return text.Text;
         }
 
-        #endregion
-
-        #region Private Data Members
-
-        private readonly AccountAction _action;
-
-        private readonly AccountData _data;
-
-        #endregion
+        /// <summary>
+        /// Helper method for filtering the password or passcode
+        /// </summary>
+        private void FilterValue(TextBox target, string filter, string defaultValue)
+        {
+            if (filter.Length == 0)
+            {
+                target.Text = "";
+            }
+            else
+            {
+                var indexes = filter.Split(',');
+                string filtered = "";
+                foreach (var i in indexes)
+                {
+                    if ((int.TryParse(i, out int index) == true) && (index <= defaultValue.Length))
+                    {
+                        filtered += defaultValue[index - 1];
+                    }
+                }
+                target.Text = filtered;
+            }
+        }
 
         private void btnCopyPassword_Click(object sender, EventArgs e)
         {
@@ -116,5 +141,40 @@ namespace PasswordWallet
         {
             Clipboard.SetText(txtPasscode.Text);
         }
+
+        private void PasswordFilterInput_KeyUp(object sender, KeyEventArgs e)
+        {
+            FilterValue(txtPasswordFilterResult, txtPasswordFilterInput.Text, _data.Password);
+        }
+
+        private void PasscodeFilterInput_KeyUp(object sender, KeyEventArgs e)
+        {
+            FilterValue(txtPasscodeFilterResult, txtPasscodeFilterInput.Text, _data.Passcode);
+        }
+
+        private void btnShowPassword_Click(object sender, EventArgs e)
+        {
+            var showPasswordDlg = new Password(Password.Action.Show,_data.Password );
+            showPasswordDlg.ShowDialog();
+        }
+
+        private void btnShowPasscode_Click(object sender, EventArgs e)
+        {
+            var showPasscodeDlg = new Password(Password.Action.Show, _data.Passcode);
+            showPasscodeDlg.ShowDialog();
+
+        }
+
+        #endregion
+
+        #region Private Data Members
+
+        private readonly AccountAction _action;
+
+        private readonly AccountData _data;
+
+        #endregion
+
+ 
     }
 }

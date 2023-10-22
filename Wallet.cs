@@ -256,7 +256,7 @@ namespace PasswordWallet
                 }
                 else
                 {
-                    var passwordDlg = new Password();
+                    var passwordDlg = new Password(Password.Action.Enter);
                     if (passwordDlg.ShowDialog() != DialogResult.OK)
                     {
                         return;
