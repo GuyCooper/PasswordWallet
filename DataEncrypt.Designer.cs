@@ -44,57 +44,64 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(41, 76);
+            this.label1.Location = new System.Drawing.Point(25, 44);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(197, 32);
+            this.label1.Size = new System.Drawing.Size(123, 18);
             this.label1.TabIndex = 0;
             this.label1.Text = "Encrytped File";
             // 
             // txtEncryptedFile
             // 
-            this.txtEncryptedFile.Location = new System.Drawing.Point(282, 70);
+            this.txtEncryptedFile.Location = new System.Drawing.Point(177, 40);
+            this.txtEncryptedFile.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.txtEncryptedFile.Name = "txtEncryptedFile";
-            this.txtEncryptedFile.Size = new System.Drawing.Size(745, 38);
+            this.txtEncryptedFile.Size = new System.Drawing.Size(467, 26);
             this.txtEncryptedFile.TabIndex = 0;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(41, 147);
+            this.label2.Location = new System.Drawing.Point(25, 86);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(198, 32);
+            this.label2.Size = new System.Drawing.Size(124, 18);
             this.label2.TabIndex = 3;
             this.label2.Text = "Decrypted File";
             // 
             // txtDecryptedFile
             // 
-            this.txtDecryptedFile.Location = new System.Drawing.Point(282, 147);
+            this.txtDecryptedFile.Location = new System.Drawing.Point(177, 86);
+            this.txtDecryptedFile.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.txtDecryptedFile.Name = "txtDecryptedFile";
-            this.txtDecryptedFile.Size = new System.Drawing.Size(745, 38);
+            this.txtDecryptedFile.Size = new System.Drawing.Size(467, 26);
             this.txtDecryptedFile.TabIndex = 1;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(41, 224);
+            this.label3.Location = new System.Drawing.Point(25, 130);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(144, 32);
+            this.label3.Size = new System.Drawing.Size(92, 18);
             this.label3.TabIndex = 6;
             this.label3.Text = "Certificate";
             // 
             // txtCertificate
             // 
-            this.txtCertificate.Location = new System.Drawing.Point(282, 218);
+            this.txtCertificate.Location = new System.Drawing.Point(177, 126);
+            this.txtCertificate.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.txtCertificate.Name = "txtCertificate";
-            this.txtCertificate.Size = new System.Drawing.Size(745, 38);
+            this.txtCertificate.Size = new System.Drawing.Size(467, 26);
             this.txtCertificate.TabIndex = 2;
             // 
             // btnOK
             // 
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(983, 279);
+            this.btnOK.Location = new System.Drawing.Point(615, 162);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(170, 64);
+            this.btnOK.Size = new System.Drawing.Size(107, 37);
             this.btnOK.TabIndex = 3;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -102,18 +109,20 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(754, 279);
+            this.btnCancel.Location = new System.Drawing.Point(472, 162);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(170, 64);
+            this.btnCancel.Size = new System.Drawing.Size(107, 37);
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // btnPickFile
             // 
-            this.btnPickFile.Location = new System.Drawing.Point(1067, 63);
+            this.btnPickFile.Location = new System.Drawing.Point(667, 36);
+            this.btnPickFile.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.btnPickFile.Name = "btnPickFile";
-            this.btnPickFile.Size = new System.Drawing.Size(84, 53);
+            this.btnPickFile.Size = new System.Drawing.Size(53, 30);
             this.btnPickFile.TabIndex = 2;
             this.btnPickFile.Text = "...";
             this.btnPickFile.UseVisualStyleBackColor = true;
@@ -121,9 +130,10 @@
             // 
             // btnPickFile1
             // 
-            this.btnPickFile1.Location = new System.Drawing.Point(1066, 143);
+            this.btnPickFile1.Location = new System.Drawing.Point(667, 83);
+            this.btnPickFile1.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.btnPickFile1.Name = "btnPickFile1";
-            this.btnPickFile1.Size = new System.Drawing.Size(84, 53);
+            this.btnPickFile1.Size = new System.Drawing.Size(53, 30);
             this.btnPickFile1.TabIndex = 5;
             this.btnPickFile1.Text = "...";
             this.btnPickFile1.UseVisualStyleBackColor = true;
@@ -136,9 +146,9 @@
             // DataEncrypt
             // 
             this.AcceptButton = this.btnOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1212, 378);
+            this.ClientSize = new System.Drawing.Size(757, 220);
             this.Controls.Add(this.btnPickFile1);
             this.Controls.Add(this.btnPickFile);
             this.Controls.Add(this.btnCancel);
@@ -149,6 +159,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtEncryptedFile);
             this.Controls.Add(this.label1);
+            this.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.Name = "DataEncrypt";
             this.Text = "Load Encrypted Data File";
             this.ResumeLayout(false);
